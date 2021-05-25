@@ -2,7 +2,7 @@ pipeline {
     agent any 
     environment {
         //once you sign up for Docker hub, use that user_id here
-        registry = "atulspatil/pythonjenkins2"
+        registry = "atulp1012/pythonjenkins2"
         //- update your credentials ID after creating credentials for connecting to Docker Hub
         registryCredential = 'e9b07e57-3c23-43f0-bdf5-986d74be47f1'
         dockerImage = ''
@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/atulspatil/jenkins2.git']]])       
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/atulspatil/pythonjenkins2.git']]])       
             }
         }
     
@@ -38,8 +38,8 @@ pipeline {
      // Stopping Docker containers for cleaner Docker run
      stage('docker stop container') {
          steps {
-            sh 'docker ps -f name=pythonjenkins2appContainer -q | xargs --no-run-if-empty docker container stop'
-            sh 'docker container ls -a -fname=pythonjenkins2appContainer -q | xargs -r docker container rm'
+            sh 'docker ps -f name=mypythonappContainer -q | xargs --no-run-if-empty docker container stop'
+            sh 'docker container ls -a -fname=mypythonappContainer -q | xargs -r docker container rm'
          }
        }
     
@@ -48,10 +48,9 @@ pipeline {
     stage('Docker Run') {
      steps{
          script {
-            dockerImage.run("-p 5556:5000 --rm --name pythonjenkins2appContainer")
+            dockerImage.run("-p 5555:5000 --rm --name mypythonappContainer")
          }
       }
     }
   }
 }
-
